@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.myextension.dto.OutfitPackRequestDto;
 import org.example.myextension.dto.OutfitPackResponseDto;
 import org.example.myextension.service.OutfitPackService;
+import org.example.myextension.dto.DeleteOutfitPackDto;
+import org.example.myextension.dto.UpdateOutfitPackDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,27 +26,27 @@ public class OutfitPackController{
 
     }
 
-    @DeleteMapping ("/delete{outfitPackId}")
-    public void deleteOutfitPack(@RequestBody Long userId,@RequestBody Long outfitPackId) {
-
-        outfitPackService.deleteOutfitPack(outfitPackId);
+    @DeleteMapping ("/delete")
+    public ResponseEntity<Void> deleteOutfitPack(@RequestBody DeleteOutfitPackDto deleteOutfitPackDto) {
+        outfitPackService.deleteOutfitPack(deleteOutfitPackDto);
+        return  ResponseEntity.noContent().build();
     }
 
-   /* @PostMapping("/edit")
-     public void editOutfit(@RequestBody Long userId,@RequestBody OutfitPackRequestDto requestDto) {
-
-    }*/
 
     @GetMapping("/get-all{userId}")
     public ResponseEntity<List<OutfitPackResponseDto>> getAllOutfitsByUserId(@RequestBody @PathVariable Long userId) {
         return  ResponseEntity.ok( outfitPackService.getAllOutfitsByUserId(userId));
     }
 
-    @GetMapping("get{outfitId}")
+    @GetMapping("/get{outfitId}")
     public ResponseEntity<OutfitPackResponseDto> getOutfitById(@PathVariable @RequestBody Long outfitId) {
         return  ResponseEntity.ok(outfitPackService.getOutfitById(outfitId));
     }
 
-
+   @PutMapping("/edit")
+    public ResponseEntity<Void> updateOutfitPack(@RequestBody UpdateOutfitPackDto updateOutfitPackDto){
+       outfitPackService.updateOutfitPack(updateOutfitPackDto);
+        return ResponseEntity.noContent().build();
+   }
 
     }

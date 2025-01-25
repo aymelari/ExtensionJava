@@ -19,4 +19,5 @@ public class OutfitPackResponseDto {
     private  String outfitName;
     private Set<Long> productIds;
     private Long userId;
+    private Double totalPrice;
 }

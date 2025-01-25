@@ -4,7 +4,12 @@ package org.example.myextension.service;
 import lombok.RequiredArgsConstructor;
 
 
-
+import org.example.myextension.dto.UserRequestDto;
+import org.example.myextension.dto.UserResponseDto;
+import org.example.myextension.entity.UserEntity;
+import org.example.myextension.entity.WishListEntity;
+import org.example.myextension.exceptions.UserNotFoundException;
+import org.example.myextension.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

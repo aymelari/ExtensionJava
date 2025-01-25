@@ -1,8 +1,9 @@
 package org.example.myextension.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -10,17 +11,27 @@ import java.util.Set;
 @Table
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-   /* private String productURL;
+    private String productURL;
     private Double price;
-    private String storeName;*/
-  /*  @ManyToMany
-    Set<WishListEntity> wishlist;
+    private String productName;
+    private String storeName;
 
-*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wishlist_id", nullable = true)
+    @JsonBackReference
+    private WishListEntity wishlist;
+
+    @ManyToMany(mappedBy = "products",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<OutfitPackEntity> outfits;
+
 
 
 

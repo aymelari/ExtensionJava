@@ -18,15 +18,21 @@ public class OutfitPackEntity {
     Long id;
     String outfitName;
 
-    @ElementCollection
-    @CollectionTable(name = "wishlist_product_ids",
-            joinColumns = @JoinColumn(name = "wishlist_id")) // Foreign key to WishListEntity
-    @Column(name = "product_id")
-    private Set<Long> productIds;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "outfit_products",
+            joinColumns = @JoinColumn(name = "outfit_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"
+            )
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    )
+    private Set<ProductEntity> products;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    Double totalPrice;
 
 
 }

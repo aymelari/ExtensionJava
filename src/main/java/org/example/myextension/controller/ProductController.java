@@ -1,26 +1,36 @@
-/*
-package org.example.extension.controller;
+package org.example.myextension.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.extension.dto.ProductRequestDto;
-import org.example.extension.dto.ProductResponseDto;
-import org.example.extension.service.ProductService;
+import org.example.myextension.dto.ProductRequestDto;
+import org.example.myextension.service.ProductService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/product")
 @RequiredArgsConstructor
+@RequestMapping("/products")
 public class ProductController {
-   private final ProductService productService;
-
-
-   @GetMapping("/get/{id}")
-    public ProductResponseDto getProductsById(@PathVariable Long productId) {
-        return productService.getProductsById(productId);
+    private final ProductService productService;
+/*
+    @PostMapping
+    public ResponseEntity<String> saveProduct(@RequestBody ProductRequestDto productRequestDto) {
+        productService.saveProduct(productRequestDto);
+        return ResponseEntity.ok("Product saved successfully");
+    }*/
+   /* @PutMapping("/{productId}")
+    public ResponseEntity<String> updateProduct(
+            @PathVariable Long productId,
+            @RequestBody ProductRequestDto productRequestDto) {
+        productService.updateProduct(productRequestDto, productId);
+        return ResponseEntity.ok("Product updated successfully");
     }
 
-
-
-
-}
+    @DeleteMapping("/{userId}/{productId}")
+    public ResponseEntity<String> deleteProductFromWishlist(
+            @PathVariable Long userId,
+            @PathVariable Long productId) {
+        productService.deleteProductFromWishlist(userId, productId);
+        return ResponseEntity.ok("Product deleted successfully");
+    }
 */
+}

@@ -1,5 +1,6 @@
 package org.example.myextension.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,12 +18,8 @@ public class UserEntity {
     private String username;
     private String email;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_wishlist",
-            joinColumns = @JoinColumn(name = "user_id")
-
-    )
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private WishListEntity wishlist;
 
 

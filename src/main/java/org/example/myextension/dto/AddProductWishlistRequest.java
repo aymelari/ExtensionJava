@@ -9,5 +9,9 @@ import lombok.Setter;
 @Builder
 public class AddProductWishlistRequest {
     private Long userId;
-    private Long productId;
+    private String productURL;
+    private Double price;
+    private String productName;
+    private String storeName;
+
 }

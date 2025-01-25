@@ -10,9 +10,11 @@ import java.util.Set;
 
 @Getter
 @Setter
+
 public class OutfitPackRequestDto {
 
     private String outfitName;
     private Set<Long> productIds;
     private Long userId;
+    private Double totalPrice;
 }

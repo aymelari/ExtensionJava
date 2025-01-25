@@ -1,8 +1,11 @@
 package org.example.myextension.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -20,16 +23,15 @@ public class WishListEntity {
   private  String name;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
 
     private UserEntity user; //
 
 
 
-    @ElementCollection
-    @CollectionTable(name = "wishlist_product_ids",
-            joinColumns = @JoinColumn(name = "wishlist_id")) // Foreign key to WishListEntity
-    @Column(name = "product_id")
-    private Set<Long> productIds;
+
+    @OneToMany(mappedBy = "wishlist",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<ProductEntity> products;
 }

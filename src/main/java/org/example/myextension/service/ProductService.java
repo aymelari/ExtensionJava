@@ -1,42 +1,42 @@
-/*
-package org.example.extension.service;
+package org.example.myextension.service;
 
-import org.example.extension.Client.*;
-import org.example.extension.dto.ProductRequestDto;
-import org.example.extension.dto.ProductResponseDto;
-import org.example.extension.entity.ProductEntity;
-import org.example.extension.exceptions.ProductNotFoundException;
-import org.example.extension.repository.ProductRepository;
-import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.annotation.Scheduled;
+import lombok.RequiredArgsConstructor;
+import org.example.myextension.dto.ProductRequestDto;
+import org.example.myextension.dto.ProductResponseDto;
+import org.example.myextension.entity.ProductEntity;
+import org.example.myextension.entity.UserEntity;
+import org.example.myextension.entity.WishListEntity;
+import org.example.myextension.repository.ProductRepository;
+import org.example.myextension.repository.UserRepository;
+import org.example.myextension.repository.WishListRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private final WishListRepository wishListRepository;
+
+   /* public void saveProduct(ProductRequestDto productRequestDto) {
+        UserEntity user = userRepository.findById(productRequestDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        WishListEntity wishlist = wishListRepository.findByUser(user);
+
+        ProductEntity product = ProductEntity.builder().productURL(productRequestDto.getProductURL())
+                .price(productRequestDto.getPrice())
+                .productName(productRequestDto.getProductName())
+                .wishlist(wishlist).build();
+        productRepository.save(product);
+
+        wishlist.getProducts().add(product);
+        wishListRepository.save(wishlist);
+    }*/
 
 
 
 
 
 
-    public ProductResponseDto getProductsById(Long productId) {
-      ProductEntity productEntity=productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("Product not found with id "+productId));
-      ProductResponseDto productResponseDto=modelMapper.map(productEntity, ProductResponseDto.class);
-      return productResponseDto;
-    }
-
-    }
 
 
-
-
-
-
-*/
+}
