@@ -13,5 +13,6 @@ public class AddProductWishlistRequest {
     private Double price;
     private String productName;
     private String storeName;
+    private String link;
 
 }

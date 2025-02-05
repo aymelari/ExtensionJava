@@ -11,6 +11,10 @@ import org.example.myextension.entity.WishListEntity;
 import org.example.myextension.exceptions.UserNotFoundException;
 import org.example.myextension.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -20,29 +24,17 @@ import org.springframework.stereotype.Service;
         private final UserRepository userRepository;
         private final ModelMapper modelMapper;
 
+        private final AuthenticationManager authenticationManager;
+        private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder() ;
 
 
 
 
-        public UserResponseDto saveUser(UserRequestDto userRequestDto) {
-            UserEntity userEntity = modelMapper.map(userRequestDto, UserEntity.class);
-            WishListEntity build = WishListEntity.builder().
-                    name(userEntity.getUsername() + "'s Wishlist")
-                    .user(userEntity).build();
-
-            userEntity.setWishlist(build);
-           userRepository.save(userEntity);
-
-            userRepository.save(userEntity);
-             return UserResponseDto.builder().
-                     username(userEntity.getUsername())
-                     .email(userEntity.getEmail())
-                     .id(userEntity.getId())
-                     .build();
-        }
 
 
-        public UserResponseDto findUserById(Long id) {
+
+
+    public UserResponseDto findUserById(Long id) {
             UserEntity userEntity = userRepository.findById(id).orElseThrow(()->(new UserNotFoundException("user not found for id "+id)));
             return UserResponseDto.builder().
                     username(userEntity.getUsername())

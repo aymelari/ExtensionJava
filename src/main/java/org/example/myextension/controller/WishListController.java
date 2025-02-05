@@ -9,6 +9,7 @@ import org.example.myextension.dto.WishListResponseDto;
 import org.example.myextension.service.ProductService;
 import org.example.myextension.service.WishListService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,11 @@ public class WishListController {
     private final WishListService wishListService;
 
 
+
+    @GetMapping("/test")
+    public String test() {
+        return "test";
+    }
 
     @PutMapping("/add")
     public void addProductToWishList(@RequestBody AddProductWishlistRequest addProductWishlistRequest) {

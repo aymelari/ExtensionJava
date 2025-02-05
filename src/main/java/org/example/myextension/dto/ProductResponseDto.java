@@ -16,6 +16,7 @@ public class ProductResponseDto {
     private String productName;
     private Long userId;
     private String storeName;
+    private String link;
 
 
 

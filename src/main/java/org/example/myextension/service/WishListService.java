@@ -20,8 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,24 +31,48 @@ public class WishListService {
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
 
-    public void addProductToWishList(AddProductWishlistRequest addProductWishlistRequest){
+    public void addProductToWishList(AddProductWishlistRequest addProductWishlistRequest) {
+        // Fetch the user entity
         UserEntity user = userRepository.findById(addProductWishlistRequest.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User Not Found" + addProductWishlistRequest.getUserId()));
-        WishListEntity wishListEntity = wishListRepository.findByUser(user);
 
-        ProductEntity build = ProductEntity.builder().productURL(addProductWishlistRequest.getProductURL())
+        // Fetch the wishlist entity for the user
+        WishListEntity wishListEntity = user.getWishlist();
+        System.out.println("WISHLIST ID" +wishListEntity.getId());
+
+        // Check if the wishlist exists, if not create a new one
+        if (wishListEntity == null) {
+            wishListEntity = new WishListEntity();
+            wishListEntity.setUser(user); // Set the user to the new wishlist
+            wishListRepository.save(wishListEntity); // Save the new wishlist
+        }
+
+        // Initialize products list if it's null
+        if (wishListEntity.getProducts() == null) {
+            wishListEntity.setProducts(new HashSet<>()); // Initialize with an empty set
+        }
+
+        // Create the new product entity
+        ProductEntity product = ProductEntity.builder()
+                .productURL(addProductWishlistRequest.getProductURL())
                 .wishlist(wishListEntity)
                 .productName(addProductWishlistRequest.getProductName())
                 .price(addProductWishlistRequest.getPrice())
                 .storeName(addProductWishlistRequest.getStoreName())
+                .link(addProductWishlistRequest.getLink())
                 .build();
 
-        productRepository.save(build);
-        wishListEntity.getProducts().add(build);
+        // Save the product entity to the repository
+        productRepository.save(product);
+
+        // Add the product to the wishlist's products collection
+        wishListEntity.getProducts().add(product);
+
+        // Save the updated wishlist entity
         wishListRepository.save(wishListEntity);
-
-
     }
+
+
     public void updateProduct(ProductRequestDto productRequestDto, Long productId) {
         UserEntity user = userRepository.findById(productRequestDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         WishListEntity wishlist = wishListRepository.findByUser(user);
@@ -64,6 +87,7 @@ public class WishListService {
         productToUpdate.setPrice(productRequestDto.getPrice());
         productToUpdate.setProductName(productRequestDto.getProductName());
         productToUpdate.setStoreName(productRequestDto.getStoreName());
+        productToUpdate.setLink(productRequestDto.getLink());
         productRepository.save(productToUpdate);
 
 
@@ -72,24 +96,28 @@ public class WishListService {
 
 
 
-
     @Transactional
     public WishListResponseDto getWishList(Long userId) {
 
         log.debug("Fetching user with ID: {}", userId);
 
-
         // Using a join fetch to load user and wishlist in one go
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User Not Found" + userId));
+                .orElseThrow(() -> new UserNotFoundException("User Not Found with ID: " + userId));
 
         log.debug("Fetching wishlist for user ID: {}", userId);
+
         // Eagerly load wishlist
         WishListEntity wishListEntity = wishListRepository.findByUser(user);
 
+        // Check if wishlist is null or products list is null, and handle accordingly
+        Set<ProductEntity> products = wishListEntity != null && wishListEntity.getProducts() != null
+                ? wishListEntity.getProducts()
+                : Collections.emptySet(); // Return an empty list if no products
+
         return WishListResponseDto.builder()
                 .userId(userId)
-                .products(wishListEntity.getProducts()) // Assuming products is not null
+                .products(products) // Ensure products is never null
                 .build();
     }
 
@@ -150,6 +178,7 @@ public class WishListService {
                 .price(trueProduct.getPrice())
                 .userId(trueProduct.getWishlist().getUser().getId())
                 .storeName(trueProduct.getStoreName())
+                .link(trueProduct.getLink())
                 .build();
 
     }

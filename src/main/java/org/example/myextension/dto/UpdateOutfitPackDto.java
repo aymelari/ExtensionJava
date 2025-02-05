@@ -14,4 +14,5 @@ public class UpdateOutfitPackDto {
     Set<Long> productIds;
     Double totalPrice;
 
+
 }

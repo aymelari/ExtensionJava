@@ -18,7 +18,7 @@ public class OutfitPackEntity {
     Long id;
     String outfitName;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "outfit_products",
             joinColumns = @JoinColumn(name = "outfit_id"),

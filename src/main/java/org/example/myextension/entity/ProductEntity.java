@@ -22,6 +22,8 @@ public class ProductEntity {
     private Double price;
     private String productName;
     private String storeName;
+    @Column(name = "link", length = 2000)
+    private String link;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wishlist_id", nullable = true)

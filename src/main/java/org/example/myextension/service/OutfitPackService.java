@@ -80,33 +80,28 @@ public class OutfitPackService {
 
 
 
+    @Transactional
     public void deleteOutfitPack(DeleteOutfitPackDto deleteOutfitPackDto) {
         try {
-            // Extract IDs from DTO
             Long userId = deleteOutfitPackDto.getUserId();
             Long outfitPackId = deleteOutfitPackDto.getOutfitPackId();
 
-            // Validate user existence
             UserEntity user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+                    .orElseThrow(() -> new RuntimeException("User not found: " + userId));
 
-            // Validate outfit pack existence and ownership
             OutfitPackEntity outfitPack = outfitPackRepository.findById(outfitPackId)
-                    .orElseThrow(() -> new RuntimeException("Outfit pack not found with ID: " + outfitPackId));
+                    .orElseThrow(() -> new RuntimeException("Outfit pack not found: " + outfitPackId));
 
             if (!outfitPack.getUser().getId().equals(user.getId())) {
-                throw new RuntimeException("Outfit pack does not belong to the specified user.");
+                throw new RuntimeException("Outfit pack ownership mismatch");
             }
 
-            // Delete the outfit pack
             outfitPackRepository.delete(outfitPack);
-        } catch (RuntimeException e) {
-            // Log the error for debugging purposes (optional)
-            e.printStackTrace();
-            throw new RuntimeException("Failed to delete outfit pack: " + e.getMessage());
+            outfitPackRepository.flush(); // Optional: Force immediate persistence
+        } catch (Exception e) {
+            throw new RuntimeException("Deletion failed: " + e.getMessage(), e);
         }
     }
-
 
 
     public List<OutfitPackResponseDto> getAllOutfitsByUserId(Long userId) {
