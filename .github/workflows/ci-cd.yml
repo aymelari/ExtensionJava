@@ -63,6 +63,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug SSH Connection
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo Connected!"
+
       - name: SSH into Server and Deploy
         uses: appleboy/ssh-action@v0.1.10
         with:
