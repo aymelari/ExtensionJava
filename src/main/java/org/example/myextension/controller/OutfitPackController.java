@@ -23,6 +23,7 @@ public class OutfitPackController{
     @PostMapping("/create")
     public void createOutfit(@RequestBody OutfitPackRequestDto requestDto) {
          outfitPackService.createOutfit( requestDto);
+        System.out.println("change");
 
     }
 
